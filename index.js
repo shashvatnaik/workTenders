@@ -27,8 +27,7 @@ app.get('/', function (req, res) {
  });
    
  var server = app.listen(port, function () {
-    const port = server.address().port;
-    console.log("app listening on port :", port)
+    console.log("app ",server.address().address, " listening on port :", server.address().port)
  });
 
  Routes(app);
