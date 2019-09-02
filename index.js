@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import cors from 'cors;'
+import cors from 'cors';
 
 import Routes from './routes';
 

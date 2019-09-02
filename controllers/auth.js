@@ -1,32 +1,29 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import googleStorage from '@google-cloud/Storage';
-import admin from 'firebase-admin';
 
 import {User} from '../models/user';
 
-const serviceAccount = require("../work-tenders-firebase-adminsdk-kylrh-e6b1484417.json");
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    storageBucket: "work-tenders.appspot.com"
-});
-
-const bucket = admin.storage().bucket();
-
 const signup = (req, res) => {
     const {name, email, phone, password, type} = req.body;
-    bcrypt.genSalt(8).then((salt) => {
-        bcrypt.hash(password, salt).then((hash) => {
-            User.create({name, email, phone, password: hash, type}).then((response) => {
-                console.log('user created successfully.');
-                res.status(200).send({message: "user created successfully"});
+    User.find({email}).then((emailData) => {
+        if(!emailData) {
+        bcrypt.genSalt(8).then((salt) => {
+            bcrypt.hash(password, salt).then((hash) => {
+                User.create({name, email, phone, password: hash, type}).then((response) => {
+                    console.log('user created successfully.');
+                    res.status(200).send({message: "user created successfully"});
+                }).catch((error) => {
+                    console.log(error);
+                }); 
             }).catch((error) => {
                 console.log(error);
-            }); 
+            });
         }).catch((error) => {
             console.log(error);
         });
+    } else {
+        res.status(409).send({message: 'User already exists!'});
+    }
     }).catch((error) => {
         console.log(error);
     });
