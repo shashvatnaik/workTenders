@@ -16,4 +16,4 @@ const updateType = (req, res) => {
     //TODO: add admin authentication with this method
 };
 
-module.exports = {getTypes}, addType, updateType;
+module.exports = {getTypes, addType, updateType};

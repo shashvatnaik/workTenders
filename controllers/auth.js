@@ -14,71 +14,22 @@ admin.initializeApp({
 
 const bucket = admin.storage().bucket();
 
-const uploadImageToStorage = (file) => {
-    return new Promise((resolve, reject) => {
-      if (!file) {
-        reject('No image file');
-      }
-      let newFileName = `${file.originalname}_${Date.now()}`;
-  
-      let fileUpload = bucket.file(newFileName);
-  
-      const blobStream = fileUpload.createWriteStream({
-        metadata: {
-          contentType: file.mimetype
-        }
-      });
-  
-      blobStream.on('error', (error) => {
-        reject('Something is wrong! Unable to upload at the moment.');
-      });
-  
-      blobStream.on('finish', () => {
-        // The public URL can be used to directly access the file via HTTP.
-        const url = format(`https://storage.googleapis.com/${bucket.name}/${fileUpload.name}`);
-        resolve(url);
-      });
-  
-      blobStream.end(file.buffer);
-    });
-}
-
 const signup = (req, res) => {
     const {name, email, phone, password, type} = req.body;
-
-    console.log(req.body);
-
-    let file = req.file;
-    console.log(file);
-    if (file) {
-        uploadImageToStorage(file).then(() => {
-        res.status(200).send({
-            status: 'success'
-        });
+    bcrypt.genSalt(8).then((salt) => {
+        bcrypt.hash(password, salt).then((hash) => {
+            User.create({name, email, phone, password: hash, type}).then((response) => {
+                console.log('user created successfully.');
+                res.status(200).send({message: "user created successfully"});
+            }).catch((error) => {
+                console.log(error);
+            }); 
         }).catch((error) => {
-            console.error(error);
+            console.log(error);
         });
-    } else {
-        console.error('file not found');
-    }
-
-    // bcrypt.genSalt(8).then((salt) => {
-    //     bcrypt.hash(password, salt).then((hash) => {
-
-        
-
-    //         User.create({name, email, phone, password: hash, type}).then((response) => {
-    //             console.log('user created successfully.');
-    //             res.status(200).send({message: "user created successfully"});
-    //         }).catch((error) => {
-    //             console.log(error);
-    //         }); 
-    //     }).catch((error) => {
-    //         console.log(error);
-    //     });
-    // }).catch((error) => {
-    //     console.log(error);
-    // });
+    }).catch((error) => {
+        console.log(error);
+    });
 };
 
 const login = (req, res) => {
