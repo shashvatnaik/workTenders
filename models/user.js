@@ -26,6 +26,13 @@ const UserSchema = new Schema({
     about: {
         type: String,
         default: ''
+    },
+    preferences: {
+        type: Array,
+        default: []
+    },
+    profile: {
+        type: String
     }
 });
 
