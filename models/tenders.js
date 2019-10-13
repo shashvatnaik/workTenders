@@ -15,16 +15,12 @@ const TendersSchema = new Schema({
     description: {
         type: String
     },
-    pictures: {
-        type: Array,
-        default: []
+    picture: {
+        type: String
     },
     category: {
         type: mongoose.Types.ObjectId,
         ref: 'category'
-    },
-    expectedTime: {
-        type: Number
     },
     location: {
         type: Object,
@@ -35,4 +31,4 @@ const TendersSchema = new Schema({
 
 const Tenders = mongoose.model('Tenders', TendersSchema);
 
-module.exports = {Tenders};
+module.exports = { Tenders };

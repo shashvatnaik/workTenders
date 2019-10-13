@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
@@ -10,6 +10,7 @@ import Routes from './routes';
 const app = express();
 
 const port = process.env.PORT || 5000;
+
 
 mongoose.connect('mongodb+srv://app:P1sC3cFo7LXWZqJ5@tenderworks-db-hqvdq.mongodb.net/WorkTenders?retryWrites=true&w=majority', { useNewUrlParser: true }).then((response) => {
    console.log("successfully connected to database.");
