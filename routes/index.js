@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { signup, login, key } from '../controllers/auth';
 import { getTypes } from '../controllers/types';
 import { getCategories } from '../controllers/category';
-import { addTender, getAllTender } from '../controllers/tender';
+import { addTender, getAllTender, getOneTender } from '../controllers/tender';
 
 const privateRouteMiddleware = (req, res, next) => {
     const token = req.get('Authorization').split('Bearer ')[1];
@@ -20,4 +20,5 @@ module.exports = (app) => {
 
     app.post('/tender', privateRouteMiddleware, addTender);
     app.get('/tender', privateRouteMiddleware, getAllTender);
+    app.get('/tender/:tenderId', privateRouteMiddleware, getOneTender);
 }

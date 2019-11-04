@@ -17,15 +17,15 @@ const addTender = (req, res) => {
 const getAllTender = (req, res) => {
     User.findById(req.user._id).then((userData) => {
         console.log(userData);
-        if(userData.type === 'customer') {
-            Tenders.find({ createdBy: mongoose.Types.ObjectId(req.user._id) }).populate('createdBy').then((data) => {
-                res.send({data});
+        if (userData.type === 'customer') {
+            Tenders.find({ createdBy: mongoose.Types.ObjectId(req.user._id) }).populate('createdBy').exec().then((data) => {
+                res.send({ data });
             }).catch(error => {
                 console.log(error);
             });
         } else {
-            Tenders.find().then((tenders) => {
-                res.send({data: tenders});
+            Tenders.find().populate('createdBy').exec().then((tenders) => {
+                res.send({ data: tenders });
             }).catch((error) => {
                 console.log(error);
             })
@@ -35,4 +35,35 @@ const getAllTender = (req, res) => {
     });
 }
 
-module.exports = { addTender, getAllTender };
+const updateTender = (req, res) => {
+    const { newTender } = req.body;
+    Tenders.findOneAndUpdate({_id: newTewnder._id}, {$set: newTender}).then(() => {
+        res.send({message: `successfully updated tender "${newTender.title}"`});
+    }).catch(error => {
+        console.log(error);
+        res.sendStatus(500).send({message: error.message});
+    })
+}
+
+const deleteTender = (req, res) => {
+    const {tenderId} = req.body;
+    Tenders.deleteOne({_id: tenderId}).then(() => {
+        res.send({message: "successfully deleted one tender"});
+    }).catch((error) => {
+        console.log(error);
+        res.sendStatus(500).send({message: error.message});
+    })
+}
+
+const getOneTender = (req, res) => {
+    const { tenderId } = req.params;
+    Tenders.findById(tenderId).populate('category').populate('createdBy').exec().then(data => {
+        if (data) {
+            res.send({ data });
+        }
+    }).catch(error => {
+        console.log(error);
+    })
+}
+
+module.exports = { addTender, getAllTender, getOneTender, deleteTender, updateTender };

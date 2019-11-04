@@ -10,6 +10,7 @@ const TendersSchema = new Schema({
     },
     createdBy: {
         type: mongoose.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     description: {
@@ -20,7 +21,7 @@ const TendersSchema = new Schema({
     },
     category: {
         type: mongoose.Types.ObjectId,
-        ref: 'category'
+        ref: 'Category'
     },
     location: {
         type: Object,

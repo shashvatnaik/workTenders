@@ -40,12 +40,13 @@ const login = (req, res) => {
         res.status(400).send({message: "Please select a type."});
     } else {    
         email ? User.findOne({ email, type: mongoose.Types.ObjectId(type) }).then((data) => {
+        data = data.toObject();
         if (data) {
             password ?
                 bcrypt.compare(password, data.password).then((compare) => {
                     if (compare) {
                         delete data.password;
-                        res.send({ token: jwt.sign(data.toObject(), key), message: 'login successfull' });
+                        res.send({ token: jwt.sign(data, key), message: 'login successful' });
                     } else {
                         res.status(401).send({message: 'Wrong Email/Password'});
                     }
