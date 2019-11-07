@@ -46,7 +46,7 @@ const updateTender = (req, res) => {
 }
 
 const deleteTender = (req, res) => {
-    const {tenderId} = req.body;
+    const {tenderId} = req.query;
     Tenders.deleteOne({_id: tenderId}).then(() => {
         res.send({message: "successfully deleted one tender"});
     }).catch((error) => {

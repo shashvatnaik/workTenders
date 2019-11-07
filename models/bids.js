@@ -3,14 +3,25 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const BidsSchema = new Schema({
-    proposal: {
+    title: {
         type: String
     },
-    proposedTime: {
+    description: {
         type: String
     },
-    sentBy: {
+    estimatedAmount: {
+        type: Number
+    },
+    userId: {
         type: mongoose.Types.ObjectId,
-        ref: 'user'
+        ref: 'User'
+    },
+    tenderId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Tenders'
     }
 });
+
+const Bids = mongoose.model('Bid', BidsSchema);
+
+module.exports = { Bids };
